@@ -61,6 +61,7 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\GetChildElementCommandTest.cs" />
     <Compile Include="Commands\GetRootElementCommandTest.cs" />
     <Compile Include="Commands\NewConditionCommandTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

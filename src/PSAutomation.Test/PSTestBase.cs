@@ -28,5 +28,20 @@ namespace PSAutomation.Test
             }
         }
 
+        protected static T[] RunCommandCollection<T>(string command)
+        {
+            var state = InitialSessionState.CreateDefault();
+            state.ImportPSModule(new[] { Path.Combine(Environment.CurrentDirectory, "PSAutomation.dll") });
+            using (var runspace = RunspaceFactory.CreateRunspace(state))
+            {
+                runspace.Open();
+                using (var p = runspace.CreatePipeline(command))
+                {
+                    var results = p.Invoke();
+                    return results.Select(r => (T)r.BaseObject).ToArray();
+                }
+            }
+        }
+
     }
 }
