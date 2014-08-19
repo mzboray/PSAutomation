@@ -3,4 +3,7 @@ Cmdlets for
   Finding elements
   Walking tree
   
+Typical scenario:
+  - Find all the windows for a specific process
+  
 Possibly a PS Path Provider for the UI Automation Tree
