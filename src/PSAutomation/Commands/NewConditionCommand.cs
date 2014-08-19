@@ -52,13 +52,13 @@ namespace PSAutomation.Commands
 
         private static Condition GetControlType(string controlType)
         {
-            var propertyInfo = typeof(ControlType).GetProperty(controlType);
-            if (propertyInfo == null)
+            var fieldInfo = typeof(ControlType).GetField(controlType);
+            if (fieldInfo == null)
             {
-                throw new Exception(string.Format(string.Format("Could not find property named '{0}'", controlType)));
+                throw new Exception(string.Format("Could not find control type '{0}'", controlType));
             }
 
-            return new PropertyCondition(AutomationElement.ControlTypeProperty, propertyInfo.GetValue(null));
+            return new PropertyCondition(AutomationElement.ControlTypeProperty, fieldInfo.GetValue(null));
         }
 
         private Condition FromPropertyNameAndValue(string name, object value)
@@ -67,14 +67,14 @@ namespace PSAutomation.Commands
             if (!lookupName.EndsWith("Property"))
                 lookupName += "Property";
 
-            var propertyInfo = typeof(AutomationElement).GetProperty(lookupName);
-            if (propertyInfo == null)
+            var fieldInfo = typeof(AutomationElement).GetField(lookupName);
+            if (fieldInfo == null)
             {
-                throw new Exception(string.Format(string.Format("Could not find property named '{0}'", name)));
+                throw new Exception(string.Format("Could not find automation property '{0}'", name));
             }
             else
             {
-                var condition = new PropertyCondition((AutomationProperty)propertyInfo.GetValue(null), value);
+                var condition = new PropertyCondition((AutomationProperty)fieldInfo.GetValue(null), value);
                 return condition;
             }
         }
