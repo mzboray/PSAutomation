@@ -2,8 +2,12 @@ Cmdlets for
   Creating conditions
   Finding elements
   Walking tree
-  
+  Helpers for using patterns in common scenarios
+  Helpers for tasks that seem simple but can be difficult (eg. getting text)
+ 
+How do we create a custom display in PS for AutomationElement, PropertyCondition, etc.?
+ 
 Typical scenario:
-  - Find all the windows for a specific process
+  - Find all the windows (more general: control type) for a specific process
   
 Possibly a PS Path Provider for the UI Automation Tree
