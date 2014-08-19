@@ -1,0 +1,6 @@
+Cmdlets for
+  Creating conditions
+  Finding elements
+  Walking tree
+  
+Possibly a PS Path Provider for the UI Automation Tree
