@@ -90,6 +90,7 @@ namespace PSAutomation.Commands
             }
             else
             {
+                // TODO: May want to coerce strings to control type using the helper method above.
                 var condition = new PropertyCondition((AutomationProperty)fieldInfo.GetValue(null), value);
                 return condition;
             }
