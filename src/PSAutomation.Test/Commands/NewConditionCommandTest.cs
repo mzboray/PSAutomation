@@ -94,5 +94,21 @@ namespace PSAutomation.Test.Commands
             Assert.AreEqual(AutomationElement.NameProperty, condition2.Property, "name prop");
             Assert.AreEqual("me", condition2.Value);
         }
+
+        [Test]
+        public void OrShouldOrConditionsTogether()
+        {
+            var result = RunCommand<OrCondition>("New-Condition -Or (New-Condition ProcessId 3), (New-Condition -Name meme)");
+            var conditions = result.GetConditions();
+            Assert.AreEqual(2, conditions.Length);
+
+            var condition1 = (PropertyCondition)conditions[0];
+            Assert.AreEqual(AutomationElement.ProcessIdProperty, condition1.Property, "id prop");
+            Assert.AreEqual(3, condition1.Value);
+
+            var condition2 = (PropertyCondition)conditions[1];
+            Assert.AreEqual(AutomationElement.NameProperty, condition2.Property, "name prop");
+            Assert.AreEqual("meme", condition2.Value);
+        }
     }
 }

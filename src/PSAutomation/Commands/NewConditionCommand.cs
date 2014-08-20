@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
@@ -30,6 +31,9 @@ namespace PSAutomation.Commands
         [Parameter(Mandatory = true, ParameterSetName = "And")]
         public Condition[] And { get; set; }
 
+        [Parameter(Mandatory = true, ParameterSetName = "Or")]
+        public Condition[] Or { get; set; }
+
         protected override void ProcessRecord()
         {
             Condition condition = null;
@@ -49,6 +53,12 @@ namespace PSAutomation.Commands
                     break;
                 case "And":
                     condition = new AndCondition(this.And);
+                    break;
+                case "Or":
+                    condition = new OrCondition(this.Or);
+                    break;
+                default:
+                    Debug.Fail(string.Format("Missing case for '{0}", this.ParameterSetName));
                     break;
             }
 
