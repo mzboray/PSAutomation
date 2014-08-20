@@ -87,7 +87,7 @@ namespace PSAutomation.Test.Commands
             Assert.AreEqual(2, conditions.Length);
 
             var condition1 = (PropertyCondition)conditions[0];
-            Assert.AreEqual(AutomationElement.ProcessIdProperty, condition1.Property, "id prop");
+            Assert.AreEqual(AutomationElement.ProcessIdProperty, condition1.Property, "proc id prop");
             Assert.AreEqual(2, condition1.Value);
 
             var condition2 = (PropertyCondition)conditions[1];
@@ -103,12 +103,61 @@ namespace PSAutomation.Test.Commands
             Assert.AreEqual(2, conditions.Length);
 
             var condition1 = (PropertyCondition)conditions[0];
-            Assert.AreEqual(AutomationElement.ProcessIdProperty, condition1.Property, "id prop");
+            Assert.AreEqual(AutomationElement.ProcessIdProperty, condition1.Property, "proc id prop");
             Assert.AreEqual(3, condition1.Value);
 
             var condition2 = (PropertyCondition)conditions[1];
             Assert.AreEqual(AutomationElement.NameProperty, condition2.Property, "name prop");
             Assert.AreEqual("meme", condition2.Value);
+        }
+
+        [Test]
+        public void HashtableInputDefault()
+        {
+            var result = RunCommand<AndCondition>("New-Condition @{ ProcessId = 4; Name = 'hello' }");
+            var conditions = result.GetConditions();
+            Assert.AreEqual(2, conditions.Length);
+
+            var name = new PropertyCondition(AutomationElement.NameProperty, "hello");
+            AssertConditionEquals(name, (PropertyCondition)conditions[0]);
+
+            var procId = new PropertyCondition(AutomationElement.ProcessIdProperty, 4);
+            AssertConditionEquals(procId, (PropertyCondition)conditions[1]);
+        }
+
+        [Test]
+        public void HashtableInputOr()
+        {
+            var result = RunCommand<OrCondition>("New-Condition -Operator Or @{ ProcessId = 3; Name = 'hello' }");
+            var conditions = result.GetConditions();
+            Assert.AreEqual(2, conditions.Length);
+
+            var name = new PropertyCondition(AutomationElement.NameProperty, "hello");
+            AssertConditionEquals(name, (PropertyCondition)conditions[0]);
+
+            var procId = new PropertyCondition(AutomationElement.ProcessIdProperty, 3);
+            AssertConditionEquals(procId, (PropertyCondition)conditions[1]);
+        }
+
+        [Test]
+        public void HashtableInputAnd()
+        {
+            var result = RunCommand<AndCondition>("New-Condition -Operator And @{ ProcessId = 4; Name = 'hello' }");
+            var conditions = result.GetConditions();
+            Assert.AreEqual(2, conditions.Length);
+
+            var name = new PropertyCondition(AutomationElement.NameProperty, "hello");
+            AssertConditionEquals(name, (PropertyCondition)conditions[0]);
+
+            var procId = new PropertyCondition(AutomationElement.ProcessIdProperty, 4);
+            AssertConditionEquals(procId, (PropertyCondition)conditions[1]);
+        }
+
+        private static void AssertConditionEquals(PropertyCondition condition, PropertyCondition actual)
+        {
+            Assert.AreEqual(condition.Property, actual.Property);
+            Assert.AreEqual(condition.Value, actual.Value);
+            Assert.AreEqual(condition.Flags, actual.Flags);
         }
     }
 }

@@ -9,6 +9,11 @@ using System.Windows.Automation;
 
 namespace PSAutomation.Commands
 {
+    public enum ConditionOperator
+    {
+        And, Or
+    }
+
     [Cmdlet(VerbsCommon.New, "Condition", DefaultParameterSetName = "PropertyAndValue")]
     [OutputType(typeof(Condition))]
     public sealed class NewConditionCommand : PSCmdlet
@@ -34,6 +39,12 @@ namespace PSAutomation.Commands
         [Parameter(Mandatory = true, ParameterSetName = "Or")]
         public Condition[] Or { get; set; }
 
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "ConditionHashtable")]
+        public System.Collections.Hashtable Conditions { get; set; }
+
+        [Parameter(ParameterSetName = "ConditionHashtable")]
+        public ConditionOperator Operator { get; set; }
+
         protected override void ProcessRecord()
         {
             Condition condition = null;
@@ -56,6 +67,14 @@ namespace PSAutomation.Commands
                     break;
                 case "Or":
                     condition = new OrCondition(this.Or);
+                    break;
+                case "ConditionHashtable":
+                    var conditions = new List<Condition>(this.Conditions.Count);
+                    foreach(System.Collections.DictionaryEntry entry in this.Conditions)
+                    {
+                        conditions.Add(FromPropertyNameAndValue((string)entry.Key, entry.Value));
+                    }
+                    condition = this.Operator == ConditionOperator.Or ? (Condition)new OrCondition(conditions.ToArray()) : new AndCondition(conditions.ToArray());
                     break;
                 default:
                     Debug.Fail(string.Format("Missing case for '{0}", this.ParameterSetName));
