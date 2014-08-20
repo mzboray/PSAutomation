@@ -16,7 +16,7 @@ namespace PSAutomation.Test.Commands
     public class NewConditionCommandTest : PSTestBase
     {
         [Test]
-        public void NewConditionShouldUseSpecifiedAutomationPropertyAndValue()
+        public void PropertyAndValueSetShouldUseSpecifiedParameters()
         {
             var result = RunCommand<PropertyCondition>("New-Condition ProcessId 101");
             Assert.AreEqual(AutomationElement.ProcessIdProperty, result.Property);
@@ -24,7 +24,23 @@ namespace PSAutomation.Test.Commands
         }
 
         [Test]
-        public void NewConditionShouldUseSpecifiedAutomationPropertyLongNameAndValue()
+        public void PropertyAndValueSetShouldUseSpecifiedParametersCaseInsensitive()
+        {
+            var result = RunCommand<PropertyCondition>("New-Condition processid 101");
+            Assert.AreEqual(AutomationElement.ProcessIdProperty, result.Property);
+            Assert.AreEqual(101, result.Value);
+        }
+
+        [Test]
+        public void PropertyAndValueSetShouldUseSpecifiedParametersExplicit()
+        {
+            var result = RunCommand<PropertyCondition>("New-Condition -Property ProcessId -Value 101");
+            Assert.AreEqual(AutomationElement.ProcessIdProperty, result.Property);
+            Assert.AreEqual(101, result.Value);
+        }
+
+        [Test]
+        public void PropertyAndValueSetShouldUseSpecifiedParametersLongNameAndValue()
         {
             var result = RunCommand<PropertyCondition>("New-Condition ProcessIdProperty 101");
             Assert.AreEqual(AutomationElement.ProcessIdProperty, result.Property);
@@ -32,7 +48,7 @@ namespace PSAutomation.Test.Commands
         }
 
         [Test]
-        public void NewConditionShouldUseSpecifiedId()
+        public void IdShouldUseSpecifiedValue()
         {
             var result = RunCommand<PropertyCondition>("New-Condition -Id abcd");
             Assert.AreEqual(AutomationElement.AutomationIdProperty, result.Property);
@@ -40,7 +56,7 @@ namespace PSAutomation.Test.Commands
         }
 
         [Test]
-        public void NewConditionShouldUseSpecifiedName()
+        public void NameUseSpecifiedValue()
         {
             var result = RunCommand<PropertyCondition>("New-Condition -Name abcd");
             Assert.AreEqual(AutomationElement.NameProperty, result.Property);
@@ -48,11 +64,19 @@ namespace PSAutomation.Test.Commands
         }
 
         [Test]
-        public void NewConditionShouldUseSpecifiedControlType()
+        public void ControlTypeShouldUseSpecifiedValue()
         {
             var result = RunCommand<PropertyCondition>("New-Condition -ControlType Window");
             Assert.AreEqual(AutomationElement.ControlTypeProperty, result.Property);
             Assert.AreEqual(ControlType.Window.Id, result.Value);
+        }
+
+        [Test]
+        public void ControlTypeShouldUseSpecifiedValueCaseInsensitive()
+        {
+            var result = RunCommand<PropertyCondition>("New-Condition -ControlType button");
+            Assert.AreEqual(AutomationElement.ControlTypeProperty, result.Property);
+            Assert.AreEqual(ControlType.Button.Id, result.Value);
         }
     }
 }

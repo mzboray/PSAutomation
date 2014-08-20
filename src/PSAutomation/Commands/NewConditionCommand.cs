@@ -13,7 +13,7 @@ namespace PSAutomation.Commands
     public sealed class NewConditionCommand : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "PropertyAndValue")]
-        public string AutomationProperty { get; set; }
+        public string Property { get; set; }
 
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "PropertyAndValue")]
         public object Value { get; set; }
@@ -33,7 +33,7 @@ namespace PSAutomation.Commands
             switch (this.ParameterSetName)
             {
                 case "PropertyAndValue":
-                    condition = FromPropertyNameAndValue(this.AutomationProperty, this.Value);
+                    condition = FromPropertyNameAndValue(this.Property, this.Value);
                     break;
                 case "Id":
                     condition = new PropertyCondition(AutomationElement.AutomationIdProperty, this.Id);
@@ -52,7 +52,7 @@ namespace PSAutomation.Commands
 
         private static Condition GetControlType(string controlType)
         {
-            var fieldInfo = typeof(ControlType).GetField(controlType);
+            var fieldInfo = typeof(ControlType).GetFields().FirstOrDefault(fi => string.Equals(fi.Name, controlType, StringComparison.InvariantCultureIgnoreCase));
             if (fieldInfo == null)
             {
                 throw new Exception(string.Format("Could not find control type '{0}'", controlType));
@@ -67,7 +67,7 @@ namespace PSAutomation.Commands
             if (!lookupName.EndsWith("Property"))
                 lookupName += "Property";
 
-            var fieldInfo = typeof(AutomationElement).GetField(lookupName);
+            var fieldInfo = typeof(AutomationElement).GetFields().FirstOrDefault(fi => string.Equals(fi.Name, lookupName, StringComparison.InvariantCultureIgnoreCase));
             if (fieldInfo == null)
             {
                 throw new Exception(string.Format("Could not find automation property '{0}'", name));
