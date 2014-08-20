@@ -78,5 +78,21 @@ namespace PSAutomation.Test.Commands
             Assert.AreEqual(AutomationElement.ControlTypeProperty, result.Property);
             Assert.AreEqual(ControlType.Button.Id, result.Value);
         }
+
+        [Test]
+        public void AndShouldAndConditionsTogether()
+        {
+            var result = RunCommand<AndCondition>("New-Condition -And (New-Condition ProcessId 2), (New-Condition -Name me)");
+            var conditions = result.GetConditions();
+            Assert.AreEqual(2, conditions.Length);
+
+            var condition1 = (PropertyCondition)conditions[0];
+            Assert.AreEqual(AutomationElement.ProcessIdProperty, condition1.Property, "id prop");
+            Assert.AreEqual(2, condition1.Value);
+
+            var condition2 = (PropertyCondition)conditions[1];
+            Assert.AreEqual(AutomationElement.NameProperty, condition2.Property, "name prop");
+            Assert.AreEqual("me", condition2.Value);
+        }
     }
 }

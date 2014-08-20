@@ -27,6 +27,9 @@ namespace PSAutomation.Commands
         [Parameter(Mandatory = true, ParameterSetName = "ControlType")]
         public string ControlType { get; set; }
 
+        [Parameter(Mandatory = true, ParameterSetName = "And")]
+        public Condition[] And { get; set; }
+
         protected override void ProcessRecord()
         {
             Condition condition = null;
@@ -43,6 +46,9 @@ namespace PSAutomation.Commands
                     break;
                 case "ControlType":
                     condition = GetControlType(this.ControlType);
+                    break;
+                case "And":
+                    condition = new AndCondition(this.And);
                     break;
             }
 
