@@ -15,7 +15,7 @@ namespace PSAutomation.Test
         protected static T RunCommand<T>(string command)
         {
             var state = InitialSessionState.CreateDefault();
-            state.ImportPSModule(new[] { Path.Combine(Environment.CurrentDirectory, "PSAutomation.dll") });
+            state.ImportPSModule(new[] { Path.Combine(Environment.CurrentDirectory, "PSAutomation.psd1") });
             using (var runspace = RunspaceFactory.CreateRunspace(state))
             {
                 runspace.Open();
