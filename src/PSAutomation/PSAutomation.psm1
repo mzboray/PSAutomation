@@ -1,2 +1,2 @@
 Set-Alias gce Get-ChildElement
-Export-ModuleMember -Alias *
+Export-ModuleMember -Alias * -Function * -Cmdlet *

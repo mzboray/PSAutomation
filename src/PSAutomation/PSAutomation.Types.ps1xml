@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Types>
+  <Type>
+    <Name>System.Windows.Automation.AutomationElement</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Name</Name>
+        <GetScriptBlock>$this.Current.Name</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Id</Name>
+        <GetScriptBlock>$this.Current.AutomationId</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ControlType</Name>
+        <GetScriptBlock>$this.Current.ControlType.ProgrammaticName</GetScriptBlock>
+      </ScriptProperty>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>Name</Name>
+              <Name>Id</Name>
+              <Name>ControlType</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
+    </Members>
+  </Type>
+</Types>
