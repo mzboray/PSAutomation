@@ -7,7 +7,8 @@ Cmdlets for
  
 How do we create a custom display in PS for AutomationElement, PropertyCondition, etc.?
  
-Typical scenario:
+Typical scenarios:
   - Find all the windows (more general: control type) for a specific process
+  - Write a small script that listens for focus changed events
   
 Possibly a PS Path Provider for the UI Automation Tree
