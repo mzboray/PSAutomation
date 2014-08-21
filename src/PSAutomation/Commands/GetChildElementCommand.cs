@@ -12,6 +12,10 @@ namespace PSAutomation.Commands
     [OutputType(typeof(AutomationElement))]
     public sealed class GetChildElementCommand : PSCmdlet
     {
+        private readonly static Condition[] TrueCondition = new[] { 
+            System.Windows.Automation.Condition.TrueCondition 
+        };
+
         [Parameter]
         public AutomationElement Root { get; set; }
 
@@ -19,15 +23,18 @@ namespace PSAutomation.Commands
         public SwitchParameter Recurse { get; set; }
 
         [Parameter]
-        public Condition Condition { get; set; }
+        public Condition[] Condition { get; set; }
 
         protected override void ProcessRecord()
         {
             AutomationElement root = this.Root ?? AutomationElement.RootElement;
             TreeScope scope = this.Recurse.IsPresent ? TreeScope.Descendants : TreeScope.Children;
-            Condition condition = this.Condition ?? Condition.TrueCondition;
-            var results = root.FindAll(scope, condition);
-            this.WriteObject(results, true);
+            Condition[] conditions = this.Condition ?? TrueCondition;
+            foreach(var condition in conditions)
+            {
+                var results = root.FindAll(scope, condition);
+                this.WriteObject(results, true);
+            }
         }
     }
 }
