@@ -13,7 +13,7 @@
       </ScriptProperty>
       <ScriptProperty>
         <Name>ControlType</Name>
-        <GetScriptBlock>$this.Current.ControlType.ProgrammaticName</GetScriptBlock>
+        <GetScriptBlock>$this.Current.ControlType.ProgrammaticName.Substring(12)</GetScriptBlock>
       </ScriptProperty>
       <MemberSet>
         <Name>PSStandardMembers</Name>

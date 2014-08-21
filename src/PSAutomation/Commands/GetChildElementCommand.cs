@@ -10,7 +10,6 @@ namespace PSAutomation.Commands
 {
     [Cmdlet(VerbsCommon.Get, "ChildElement")]
     [OutputType(typeof(AutomationElement))]
-    [Alias("gce")]
     public sealed class GetChildElementCommand : PSCmdlet
     {
         [Parameter]
