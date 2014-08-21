@@ -126,6 +126,14 @@ namespace PSAutomation.Test.Commands
         }
 
         [Test]
+        public void CanConvertStringToControlType()
+        {
+            var result = RunCommand<PropertyCondition>("New-Condition ControlType 'Window'");
+            Assert.AreEqual(AutomationElement.ControlTypeProperty, result.Property);
+            Assert.AreEqual(ControlType.Window.Id, result.Value);
+        }
+
+        [Test]
         public void HashtableInputOr()
         {
             var result = RunCommand<OrCondition>("New-Condition -Operator Or @{ ProcessId = 3; Name = 'hello' }");

@@ -60,7 +60,7 @@ namespace PSAutomation.Commands
                     condition = new PropertyCondition(AutomationElement.NameProperty, this.Name);
                     break;
                 case "ControlType":
-                    condition = GetControlType(this.ControlType);
+                    condition = GetControlTypeCondition(this.ControlType);
                     break;
                 case "And":
                     condition = new AndCondition(this.And);
@@ -85,7 +85,7 @@ namespace PSAutomation.Commands
                 this.WriteObject(condition);
         }
 
-        private static Condition GetControlType(string controlType)
+        private static ControlType GetControlType(string controlType)
         {
             var fieldInfo = typeof(ControlType).GetFields().FirstOrDefault(fi => string.Equals(fi.Name, controlType, StringComparison.InvariantCultureIgnoreCase));
             if (fieldInfo == null)
@@ -93,7 +93,13 @@ namespace PSAutomation.Commands
                 throw new Exception(string.Format("Could not find control type '{0}'", controlType));
             }
 
-            return new PropertyCondition(AutomationElement.ControlTypeProperty, fieldInfo.GetValue(null));
+            return (ControlType)fieldInfo.GetValue(null);
+        }
+
+        private static Condition GetControlTypeCondition(string controlType)
+        {
+            ControlType controlTypeObj = GetControlType(controlType);
+            return new PropertyCondition(AutomationElement.ControlTypeProperty, controlTypeObj);
         }
 
         private Condition FromPropertyNameAndValue(string name, object value)
@@ -109,8 +115,15 @@ namespace PSAutomation.Commands
             }
             else
             {
-                // TODO: May want to coerce strings to control type using the helper method above.
-                var condition = new PropertyCondition((AutomationProperty)fieldInfo.GetValue(null), value);
+                var property = (AutomationProperty)fieldInfo.GetValue(null);
+                if (property.Id == AutomationElement.ControlTypeProperty.Id)
+                {
+                    if (value is string)
+                    {
+                        value = GetControlType((string)value);
+                    }
+                }
+                var condition = new PropertyCondition(property, value);
                 return condition;
             }
         }
