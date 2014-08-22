@@ -5,7 +5,7 @@ properties {
 	$psAutomationModule  = "$modules\PSAutomation"
 }
 
-Framework "4.0"
+Framework "4.5.1"
 
 task default -depends Test
 
