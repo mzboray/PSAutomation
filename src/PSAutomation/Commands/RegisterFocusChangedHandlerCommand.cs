@@ -41,6 +41,7 @@ namespace PSAutomation.Commands
 
             foreach(var handler in localHandlers)
             {
+                thi
                 handler.Invoke(src, args);
             }
         }
