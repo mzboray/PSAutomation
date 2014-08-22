@@ -45,6 +45,7 @@
     <Compile Include="Commands\GetChildElementCommand.cs" />
     <Compile Include="Commands\GetRootElementCommand.cs" />
     <Compile Include="Commands\NewConditionCommand.cs" />
+    <Compile Include="Commands\RegisterFocusChangedHandlerCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
