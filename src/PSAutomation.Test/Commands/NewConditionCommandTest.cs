@@ -72,6 +72,42 @@ namespace PSAutomation.Test.Commands
         }
 
         [Test]
+        public void CommonPropertiesCanBeCombined()
+        {
+            var result = RunCommand<AndCondition>("New-Condition -Id Test -Name Blah -ControlType Window");
+            var conditions = result.GetConditions();
+            Assert.AreEqual(3, conditions.Length);
+
+            var expected = new PropertyCondition(AutomationElement.AutomationIdProperty, "Test");
+            AssertContainsCondition(expected, conditions);
+
+            expected = new PropertyCondition(AutomationElement.NameProperty, "Blah");
+            AssertContainsCondition(expected, conditions);
+
+            expected = new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Window);
+            AssertContainsCondition(expected, conditions);
+        }
+
+        private static void AssertContainsCondition(PropertyCondition expected, IEnumerable<Condition> conditions)
+        {
+            bool found = false;
+            foreach(var condition in conditions.OfType<PropertyCondition>())
+            {
+                if (expected.Property.Equals(condition.Property) && object.Equals(expected.Value, condition.Value))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                string message = string.Format("Could not find a PropertyCondition matching Property = {0}, Value = '{1}'", Automation.PropertyName(expected.Property), expected.Value);
+                throw new AssertionException(message);
+            }
+        }
+
+        [Test]
         public void ControlTypeShouldUseSpecifiedValueCaseInsensitive()
         {
             var result = RunCommand<PropertyCondition>("New-Condition -ControlType button");
