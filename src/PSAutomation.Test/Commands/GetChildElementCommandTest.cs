@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Automation;
@@ -16,6 +17,18 @@ namespace PSAutomation.Test.Commands
         {
             var elements = RunCommandCollection<AutomationElement>("Get-ChildElement");
             Assert.AreEqual(AutomationElement.RootElement.FindAll(TreeScope.Children, Condition.TrueCondition), elements);
+        }
+
+        [Test]
+        public void GetChildElementHasExtendedProperties()
+        {
+            var element = RunCommandCollectionRaw("Get-ChildElement")[0];
+            var propertyNames = element.Properties.Select(p => p.Name).ToList();
+            Assert.GreaterOrEqual(propertyNames.Count, 3);
+            foreach(var prop in ((AutomationElement)element.BaseObject).GetSupportedProperties())
+            {
+                Assert.Contains(Automation.PropertyName(prop), propertyNames);
+            }
         }
 
         [Test]

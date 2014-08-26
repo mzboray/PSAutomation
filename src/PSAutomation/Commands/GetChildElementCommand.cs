@@ -33,7 +33,8 @@ namespace PSAutomation.Commands
             foreach(var condition in conditions)
             {
                 var results = root.FindAll(scope, condition);
-                this.WriteObject(results, true);
+                var wrappedResuults = PSObjectFactory.WrapElements(results.OfType<AutomationElement>());
+                this.WriteObject(wrappedResuults, true);
             }
         }
     }

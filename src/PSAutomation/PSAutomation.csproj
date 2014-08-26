@@ -46,6 +46,7 @@
     <Compile Include="Commands\GetRootElementCommand.cs" />
     <Compile Include="Commands\NewConditionCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PSObjectFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PSAutomation.psd1">
