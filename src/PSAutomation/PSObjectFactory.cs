@@ -24,6 +24,14 @@ namespace PSAutomation
                 var psProp = new PSScriptProperty(name, ScriptBlock.Create(script));
                 psObj.Properties.Add(psProp);
             }
+
+            foreach(var pattern in element.GetSupportedPatterns())
+            {
+                string name = Automation.PatternName(pattern) + "Pattern";
+                string script = string.Format("$this.GetCurrentPattern([System.Windows.Automation.AutomationPattern]::LookupById({0}))", pattern.Id);
+                var psProp = new PSScriptProperty(name, ScriptBlock.Create(script));
+                psObj.Properties.Add(psProp);
+            }
             return psObj;
         }
 
