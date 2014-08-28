@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,20 +32,32 @@ namespace PSAutomation.Test
 
         protected static T RunCommand<T>(string command)
         {
+            var result = RunCommandRaw(command);
+            return (T)result.BaseObject;
+        }
+
+        protected static PSObject RunCommandRaw(string command)
+        {
             using (var p = DefaultRunspace.CreatePipeline(command))
             {
                 var results = p.Invoke();
                 Assert.AreEqual(1, results.Count);
-                return (T)results[0].BaseObject;
+                return results[0];
             }
         }
 
         protected static T[] RunCommandCollection<T>(string command)
         {
+            var results = RunCommandCollectionRaw(command);
+            return results.Select(r => (T)r.BaseObject).ToArray();
+        }
+
+        protected static PSObject[] RunCommandCollectionRaw(string command)
+        {
             using (var p = DefaultRunspace.CreatePipeline(command))
             {
                 var results = p.Invoke();
-                return results.Select(r => (T)r.BaseObject).ToArray();
+                return results.ToArray();
             }
         }
     }

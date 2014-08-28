@@ -14,7 +14,7 @@ namespace PSAutomation.Commands
     {
         protected override void ProcessRecord()
         {
-            this.WriteObject(AutomationElement.RootElement);
+            this.WriteObject(PSObjectFactory.WrapElement(AutomationElement.RootElement));
         }
     }
 }

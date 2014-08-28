@@ -24,13 +24,13 @@ namespace PSAutomation.Commands
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "PropertyAndValue")]
         public object Value { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Id")]
+        [Parameter(ParameterSetName = "CommonProperties")]
         public string Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Name")]
+        [Parameter(ParameterSetName = "CommonProperties")]
         public string Name { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "ControlType")]
+        [Parameter(ParameterSetName = "CommonProperties")]
         public string ControlType { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "And")]
@@ -53,14 +53,8 @@ namespace PSAutomation.Commands
                 case "PropertyAndValue":
                     condition = FromPropertyNameAndValue(this.Property, this.Value);
                     break;
-                case "Id":
-                    condition = new PropertyCondition(AutomationElement.AutomationIdProperty, this.Id);
-                    break;
-                case "Name":
-                    condition = new PropertyCondition(AutomationElement.NameProperty, this.Name);
-                    break;
-                case "ControlType":
-                    condition = GetControlTypeCondition(this.ControlType);
+                case "CommonProperties":
+                    condition = FromCommonPropeties();
                     break;
                 case "And":
                     condition = new AndCondition(this.And);
@@ -83,6 +77,34 @@ namespace PSAutomation.Commands
 
             if (condition != null)
                 this.WriteObject(condition);
+        }
+
+        private Condition FromCommonPropeties()
+        {
+            List<Condition> conditions = new List<Condition>();
+            if (this.Name != null)
+            {
+                conditions.Add(new PropertyCondition(AutomationElement.NameProperty, this.Name));
+            }
+
+            if (this.Id != null)
+            {
+                conditions.Add(new PropertyCondition(AutomationElement.AutomationIdProperty, this.Id));
+            }
+
+            if (this.ControlType != null)
+            {
+                conditions.Add(GetControlTypeCondition(this.ControlType));
+            }
+
+            if (conditions.Count == 1)
+            {
+                return conditions[0];
+            }
+            else
+            {
+                return new AndCondition(conditions.ToArray());
+            }
         }
 
         private static ControlType GetControlType(string controlType)

@@ -30,4 +30,46 @@
       </MemberSet>
     </Members>
   </Type>
+  <Type>
+    <Name>System.Windows.Automation.PropertyCondition</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>PropertyName</Name>
+        <GetScriptBlock>$this.Property.FriendlyName</GetScriptBlock>
+      </ScriptProperty>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>PropertyName</Name>
+              <Name>Value</Name>
+              <Name>Flags</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
+    </Members>
+  </Type>
+  <Type>
+    <Name>System.Windows.Automation.AutomationProperty</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>FriendlyName</Name>
+        <GetScriptBlock>[System.Windows.Automation.Automation]::PropertyName($this)</GetScriptBlock>
+      </ScriptProperty>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>ProgrammaticName</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
+    </Members>
+  </Type>
 </Types>
