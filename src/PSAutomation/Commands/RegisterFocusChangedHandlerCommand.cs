@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.PowerShell.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -11,39 +12,41 @@ namespace PSAutomation.Commands
     [Cmdlet("Register", "FocusChangedEvent")]
     public sealed class RegisterFocusChangedEventCommand : PSCmdlet
     {
-        private readonly static List<ScriptBlock> handlers = new List<ScriptBlock>();
-        private static AutomationFocusChangedEventHandler psHandler;
-
-        [Parameter(Mandatory = true, Position = 0)]
+        [Parameter]
         public ScriptBlock Action { get; set; }
 
         protected override void ProcessRecord()
         {
-            if (psHandler == null)
+            var regCmd = new RegisterObjectEventCommand()
             {
-                psHandler = FocusChangedHandler;
-                Automation.AddAutomationFocusChangedEventHandler(psHandler);
-            }
-
-            lock (handlers)
-            {
-                handlers.Add(this.Action);
-            }
+                InputObject = new PSObject(PSAutomationEvent.Instance),
+                EventName = "FocusChanged",
+                Action = this.Action
+            };
+            this.WriteObject(regCmd.Invoke(), true);
         }
+    }
 
-        private static void FocusChangedHandler(object src, AutomationFocusChangedEventArgs args)
+    public class PSAutomationEvent
+    {
+        private static readonly PSAutomationEvent _instance = new PSAutomationEvent();
+        
+        private PSAutomationEvent()
         {
-            ScriptBlock[] localHandlers;
-            lock(handlers)
-            {
-                localHandlers = handlers.ToArray();
-            }
-
-            foreach(var handler in localHandlers)
-            {
-                thi
-                handler.Invoke(src, args);
-            }
+            Automation.AddAutomationFocusChangedEventHandler(this.FocusChangedHandler);
         }
+
+        public static PSAutomationEvent Instance { get { return _instance; } }
+
+        public event AutomationFocusChangedEventHandler FocusChanged;
+
+        private void FocusChangedHandler(object sender, AutomationFocusChangedEventArgs e)
+        {
+            var handler = FocusChanged;
+            if (handler != null)
+            {
+                handler(sender, e);
+            }
+        }        
     }
 }
