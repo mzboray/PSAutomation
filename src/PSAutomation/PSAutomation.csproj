@@ -46,6 +46,7 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\FindWindowCommand.cs" />
     <Compile Include="Commands\GetChildElementCommand.cs" />
     <Compile Include="Commands\GetRootElementCommand.cs" />
     <Compile Include="Commands\NewConditionCommand.cs" />
